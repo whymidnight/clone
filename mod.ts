@@ -9,7 +9,7 @@ export function prepareDestPath(destDir: string, source: string) {
   return path.join(
     destDir,
     sshHostname || hostname,
-    (sshPathname || pathname).replace(/.git$/, ""),
+    (sshPathname || pathname).replace(/.git$/, "")
   );
 }
 
@@ -24,7 +24,7 @@ export async function clone(source: string, dest: string) {
   console.log(`Clone '${source}' into '${dest}'...`);
 
   const clone = run({
-    cmd: ["git", "clone", source, dest],
+    cmd: ["git", "clone", "--depth", "1", source, dest],
   });
   const cloneResult = await clone.status();
 
