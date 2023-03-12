@@ -25,10 +25,20 @@ export async function clone(source: string, dest: string) {
 
   const clone = run({
     cmd: ["git", "clone", "--depth", "1", source, dest],
+    stderr: "piped",
+    stdout: "piped",
   });
-  const cloneResult = await clone.status();
+  const [status, stdout, stderr] = await Promise.all([
+    clone.status(),
+    clone.output(),
+    clone.stderrOutput(),
+  ]);
+  clone.close();
 
-  if (!cloneResult.success) {
+  if (!status.success) {
+    console.log(stdout);
+    console.warn(stderr);
+
     throw new Error("Failed to clone.");
   }
 }
